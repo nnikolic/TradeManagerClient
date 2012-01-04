@@ -1,0 +1,102 @@
+package app;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
+
+import de.javasoft.swing.JYTabbedPane;
+import de.javasoft.swing.JYTabbedPane.CloseButtonStrategy;
+import de.javasoft.swing.plaf.jytabbedpane.Tab;
+
+import actions.ActionManager;
+
+import localization.Local;
+
+import skin.SkinChosser;
+
+public class MainFrame extends JFrame {
+	private static final long serialVersionUID = 1729233823098776690L;
+	private JMenuBar menuBar;
+	private JMenu toolMenu;
+	private JMenu skinMenu;
+	private JMenu radniciMenu;
+	private JYTabbedPane tabbedPane = null;
+	private JLabel stanjeLabela = new JLabel("Opcija:");
+	private JPanel contentPanel = null, statusPanel = null;
+	private JToolBar toolBar = null;
+
+	public MainFrame() {
+		contentPanel = new JPanel(new BorderLayout());
+		tabbedPane = new JYTabbedPane();
+		tabbedPane.setCloseButtonStrategy(CloseButtonStrategy.ALL_TABS);
+		tabbedPane.getActionMap().put("closeTab", new AbstractAction() {
+			public void actionPerformed(ActionEvent evt) {
+				Tab tab = (Tab) SwingUtilities.getAncestorOfClass(Tab.class,
+						(Component) evt.getSource());
+				int result = JOptionPane.showConfirmDialog(SwingUtilities
+						.getWindowAncestor(tab), "Really close tab number #"
+						+ (tab.getTabIndex() + 1) + " ?", "Confirmation",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION)
+					tabbedPane.removeTabAt(tab.getTabIndex());
+			}
+		});
+		statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		statusPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		statusPanel.add(stanjeLabela);
+
+		toolBar = new JToolBar();
+
+		contentPanel.add(tabbedPane, BorderLayout.NORTH);
+		contentPanel.add(statusPanel, BorderLayout.SOUTH);
+
+		setContentPane(contentPanel);
+		setPreferredSize(new Dimension(1024, 768));
+		initMenuBar();
+		setJMenuBar(menuBar);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+		pack();
+		setLocationRelativeTo(null);
+	}
+	
+	public void addNewTab(String tabName, JComponent tab){
+		tabbedPane.addTab(tabName, tab);
+	}
+
+	public JPanel getContentPanel() {
+		return contentPanel;
+	}
+
+	public JLabel getStanjeLabela() {
+		return stanjeLabela;
+	}
+
+	private void initMenuBar() {
+		menuBar = new JMenuBar();
+		toolMenu = new JMenu(Local.getString("MENU.TOOLS"));
+		skinMenu = SkinChosser.getSkinMenu();
+		toolMenu.add(skinMenu);
+		radniciMenu = new JMenu(Local.getString("MENU.RADNICI"));
+		radniciMenu
+				.add(ActionManager.getInstance().getDodavenjeRadnikaAction());
+		radniciMenu.add(ActionManager.getInstance().getPregledRadnikaAction());
+		menuBar.add(radniciMenu);
+		menuBar.add(toolMenu);
+	}
+}

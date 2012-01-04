@@ -1,0 +1,46 @@
+package actions;
+
+import java.io.Serializable;
+
+import actions.radnici.DodavanjeRadnikaAction;
+import actions.radnici.PregledRadnikaAction;
+
+/**
+ * @author Nenad Nikolic, indeks: 10/06
+ *
+ */
+
+public class ActionManager implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -674583262500649407L;
+
+	private static ActionManager instance = null;
+	private DodavanjeRadnikaAction dodavenjeRadnikaAction = null;
+	private PregledRadnikaAction pregledRadnikaAction = null;
+	
+	private ActionManager() {
+	}
+	
+	public static ActionManager getInstance(){
+		if(instance == null){
+			instance = new ActionManager(); 
+			instance.init();
+		}
+		return instance;
+	}
+	
+	public void init(){
+		dodavenjeRadnikaAction = new DodavanjeRadnikaAction();
+		pregledRadnikaAction = new PregledRadnikaAction();
+	}
+	
+	public DodavanjeRadnikaAction getDodavenjeRadnikaAction() {
+		return dodavenjeRadnikaAction;
+	}
+	
+	public PregledRadnikaAction getPregledRadnikaAction() {
+		return pregledRadnikaAction;
+	}
+}

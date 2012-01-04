@@ -1,0 +1,20 @@
+
+control = 0 25 89
+
+id = 2
+
+name = Custom skin 1
+
+nimbusBase = 51 51 51
+
+nimbusBlueGrey = 45 45 45
+
+nimbusFocus = 249 209 0
+
+nimbusLightBackground = 102 102 102
+
+nimbusSelectedText = 249 209 0
+
+nimbusSelectionBackground = 0 0 0
+
+text = 249 209 0
