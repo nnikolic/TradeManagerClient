@@ -13,4 +13,5 @@ public interface GenericInputFormI {
 	
 	public ServerResponse saveEntity();
 	public void print();
+	public void onShow();
 }

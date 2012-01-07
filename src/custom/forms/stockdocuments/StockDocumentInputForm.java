@@ -228,4 +228,10 @@ public class StockDocumentInputForm extends JPanel implements GenericInputFormI{
 			Appliction.getInstance().getPopupProgressBar().setVisible(false);
 		}
 	}
+
+	@Override
+	public void onShow() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -7,4 +7,5 @@ public interface GenericSearchFormI {
 	public ServerResponse search();
 	public void reset();
 	public MessageObject validateInput();
+	public void onShow();
 }

@@ -5,6 +5,8 @@ import generic.tools.MessageObject;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +17,12 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+
+import actions.ActionManager;
+import actions.generic.DoSearchAction;
+import app.Appliction;
 
 import layouts.RiverLayout;
 import localization.Local;
@@ -39,7 +47,7 @@ public class GenericSearchForm extends JPanel implements GenericSearchFormI{
 	private Map<String, JComponent> fieldMap = null;
 	private GenericFormToolbar toolbar = null;
 	private FormType formType;
-
+	private JComponent focuseComp = null;
 	private Map<String, Object> defaultSearchMap = null;
 	 
 	public GenericSearchForm(EntityMetadata em, FormType formType){
@@ -83,6 +91,17 @@ public class GenericSearchForm extends JPanel implements GenericSearchFormI{
 					comp = new JCheckBox();
 				}else{
 					comp = getTextField(ef);
+					if (focuseComp == null) {
+						focuseComp = comp;
+					}
+					((JTextField) comp).addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							ActionManager.getInstance().getDoSearchAction().actionPerformed(e);
+							
+						}
+					});
 				}
 				fieldMap.put(ef.getFieldName(), comp);
 				p.add(l, BorderLayout.WEST);
@@ -102,6 +121,7 @@ public class GenericSearchForm extends JPanel implements GenericSearchFormI{
 		}
 		add(toolbar, BorderLayout.NORTH);
 		add(centralPanel, BorderLayout.CENTER);
+		
 	}
 	
 	
@@ -215,4 +235,11 @@ public class GenericSearchForm extends JPanel implements GenericSearchFormI{
 		JTextField tf = new JTextField(30);
 		return tf;
 	}
+
+	@Override
+	public void onShow() {
+		focuseComp.requestFocus();
+		
+	}
+	
 }
