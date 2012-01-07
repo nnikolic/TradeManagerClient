@@ -203,15 +203,18 @@ public class GenericForm extends JPanel {
 				ServerResponse sr = RemotesManager.getInstance().getGenericPersistenceRemote().selectFetchEntity(Class.forName(getEntityMetadata().getEntityClassPath()), getEntityMetadata().getPrimKeyFieldDBName(), ((EntityObject)selectedObject).getID(), arr);
 				genericInputFormI.populateData(sr.getData());
 				cl.show(this, "EditForm");
+				genericInputFormI.onShow();
 				break;
 			case SearchState:
 				//genericSearchFormI.reset();
 				cl.show(this, "SearchForm");
+				genericSearchFormI.onShow();
 				break;
 			default: // insert state
 					genericInputFormI.populateData(Class.forName(getEntityMetadata().getEntityClassPath()).newInstance());
 					genericInputFormI.reset();
 				cl.show(this, "EditForm");
+				genericInputFormI.onShow();
 				break;
 			}
 		} catch (InstantiationException e) {

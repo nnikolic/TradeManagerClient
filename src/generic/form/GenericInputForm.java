@@ -56,7 +56,8 @@ public class GenericInputForm extends JPanel implements GenericInputFormI, Looku
 	private FormType formType;
 	private Object parent;
 	private String childId;
-
+	private JComponent requestComp = null;
+	
 	public GenericInputForm(EntityMetadata entityMetadata, EntityMetadata parentMeta, FormType ft, Object p, String childId) {
 		this.entityMetadata = entityMetadata;
 		parent = p;
@@ -117,10 +118,12 @@ public class GenericInputForm extends JPanel implements GenericInputFormI, Looku
 				if(ef.isRelField() && !ef.isLookup()){
 					component.setEnabled(false);
 				}
-				
 				panels.get((int) Math.round(Math.floor((count * columns)/length))).add(
 						"br", p);
 				count++;
+				if(requestComp == null && component.isEnabled()){
+					requestComp = component;
+				}
 			}
 		}
 		add(centralPanel, BorderLayout.CENTER);
@@ -352,4 +355,18 @@ public class GenericInputForm extends JPanel implements GenericInputFormI, Looku
 		}
 		populateData(data);
 	}
+
+	public JComponent getRequestComp() {
+		return requestComp;
+	}
+
+	public void setRequestComp(JComponent requestComp) {
+		this.requestComp = requestComp;
+	}
+
+	@Override
+	public void onShow() {
+		getRequestComp().requestFocus();
+	}
+	
 }

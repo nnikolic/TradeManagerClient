@@ -127,4 +127,8 @@ public class SalesPriceBasicInfoForm extends JPanel{
 		add("tab hfill",openedCheck);
 	}
 
+	public JTextField getNameField() {
+		return nameField;
+	}
+	
 }
