@@ -203,6 +203,7 @@ public class GenericForm extends JPanel {
 				ServerResponse sr = RemotesManager.getInstance().getGenericPersistenceRemote().selectFetchEntity(Class.forName(getEntityMetadata().getEntityClassPath()), getEntityMetadata().getPrimKeyFieldDBName(), ((EntityObject)selectedObject).getID(), arr);
 				genericInputFormI.populateData(sr.getData());
 				cl.show(this, "EditForm");
+				
 				break;
 			case SearchState:
 				//genericSearchFormI.reset();

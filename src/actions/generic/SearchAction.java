@@ -23,5 +23,6 @@ public class SearchAction extends CustomAbstractAction{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Appliction.getInstance().getCurrentForm().setState(FormStateEnum.SearchState);
+		Appliction.getInstance().getCurrentForm().getGenericSearchForm().onShow();
 	}
 }

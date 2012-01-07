@@ -36,5 +36,6 @@ public class EditAction extends CustomAbstractAction{
 		}
 		
 		Appliction.getInstance().getCurrentForm().setState(FormStateEnum.EditState);
+		Appliction.getInstance().getCurrentForm().getGenericInputForm().onShow();
 	}
 }

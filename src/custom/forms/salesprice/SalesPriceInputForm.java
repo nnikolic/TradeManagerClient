@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -54,6 +55,8 @@ public class SalesPriceInputForm extends JPanel implements GenericInputFormI{
 	private JPanel leftPanel = null;
 	
 	private FormType formType;
+	
+	private JComponent requestComp = null;
 	
 	public SalesPriceInputForm(){
 		initComponents();
@@ -192,5 +195,11 @@ public class SalesPriceInputForm extends JPanel implements GenericInputFormI{
 		}else{
 			Appliction.getInstance().getPopupProgressBar().setVisible(false);
 		}
+	}
+
+	@Override
+	public void onShow() {
+		basicInfoForm.getNameField().requestFocus();
+		
 	}
 }
