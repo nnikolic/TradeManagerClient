@@ -33,14 +33,14 @@ public class LookupTextInput extends JPanel{
 	 */
 	private static final long serialVersionUID = 399991515249344222L;
 	
-	private JButton lookupBtn = null;
+	protected JButton lookupBtn = null;
 	
-	private JTextField lookupTextButton = null;
+	protected JTextField lookupTextButton = null;
 	
-	private LookupAction lookupAction = null;
+	protected LookupAction lookupAction = null;
 	
-	private String fieldName = "", dataType = "";
-	private EntityMetadata metadata = null;
+	protected String fieldName = "", dataType = "";
+	protected EntityMetadata metadata = null;
 	
 	public LookupTextInput(String entityFileName, String fieldName, String dataType, Object parent, String siblingId, LookupListener ll, boolean filteredLoad, Map<String, Object> searchMap){
 		this.fieldName = fieldName;
@@ -108,7 +108,7 @@ public class LookupTextInput extends JPanel{
 		lookupBtn.setAction(lookupAction);
 	}
 	
-	private void doLookup(){
+	protected void doLookup(){
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		if(lookupAction.getFilterMap()!=null){
 			for(String key: lookupAction.getFilterMap().keySet()){

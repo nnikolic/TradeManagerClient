@@ -3,7 +3,6 @@ package custom.forms.stockdocuments;
 import generic.events.ItemsSelectedEvent;
 import generic.events.LookupEvent;
 import generic.events.TableDataChangedEvent;
-import generic.form.components.LookupTextInput;
 import generic.listeners.ItemsSelectedListener;
 import generic.listeners.LookupListener;
 import generic.listeners.TableDataChangedListener;
@@ -27,6 +26,7 @@ import javax.swing.JTextField;
 import layouts.RiverLayout;
 import localization.Local;
 import model.metadata.EntityMetadata;
+import custom.forms.stockdocuments.components.PriceLookupComponent;
 
 public class NewDocumentItemPanel extends JPanel implements LookupListener, ActionListener, ItemsSelectedListener{
 
@@ -49,7 +49,7 @@ public class NewDocumentItemPanel extends JPanel implements LookupListener, Acti
 	
 	private StockDocumentItem currItem = null;
 	
-	private LookupTextInput lookupComp = null;
+	private PriceLookupComponent lookupComp = null;
 	
 	private Double discount;
 	
@@ -64,14 +64,14 @@ public class NewDocumentItemPanel extends JPanel implements LookupListener, Acti
 	}
 	
 	private void initComponents(){
-		priceIDLabel = new JLabel(Local.getString("STOCKDOCUMENT.NEWITEMFORM.PRICEID"));
+		priceIDLabel = new JLabel(Local.getString("STOCKDOCUMENT.NEWITEMFORM.PRODUCTCODE"));
 		productNameLabel = new JLabel(Local.getString("STOCKDOCUMENT.NEWITEMFORM.PRODUCTNAME"));
 		quantityLabel = new JLabel(Local.getString("STOCKDOCUMENT.NEWITEMFORM.QUANTITY"));
 		discountLabel = new JLabel(Local.getString("STOCKDOCUMENT.NEWITEMFORM.DISCOUNT_LABEL"));
 		
 //		lookupAction = new LookupAction(
 //				"SalesPriceItem.xml", null, "price", this);
-		lookupComp = new LookupTextInput("SalesPriceItem.xml", "ID", "Integer", null, "price", this, false, null);
+		lookupComp = new PriceLookupComponent(stockDocument.getSalesPrice(), "SalesPriceItem.xml", "ID", "Integer", null, "price", this, false, null);
 		lookupComp.setEnabled(false);
 //		lookupBtn = new JButton(lookupAction);
 //		lookupBtn.setEnabled(false);
@@ -121,7 +121,7 @@ public class NewDocumentItemPanel extends JPanel implements LookupListener, Acti
 	}
 	
 	public void bindData(){
-		lookupComp.setText(currItem.getSalesPriceItem()!=null? Integer.toString(currItem.getSalesPriceItem().getID()) : "");
+		lookupComp.setText(currItem.getSalesPriceItem()!=null? currItem.getSalesPriceItem().getProduct().getCode() : "");
 		productNameField.setText(currItem.getSalesPriceItem()!=null? currItem.getSalesPriceItem().getProduct().getName() : "");
 		quantityField.setText(Double.toString(currItem.getQuantity()));
 		discountField.setText(Double.toString(discount));
@@ -137,8 +137,11 @@ public class NewDocumentItemPanel extends JPanel implements LookupListener, Acti
 	
 	public void setStockDocument(StockDocument stockDocument) {
 		this.stockDocument = stockDocument;
+		resetLookupField();
 		if(stockDocument != null && stockDocument.getSalesPrice()!=null){
 			lookupComp.setEnabled(true);
+		}else{
+			lookupComp.setEnabled(false);
 		}
 	}
 
@@ -150,15 +153,19 @@ public class NewDocumentItemPanel extends JPanel implements LookupListener, Acti
 			quantityField.selectAll();
 			quantityField.requestFocus();
 		}else{
-			Map<String, Object> searchMap = new HashMap<String, Object>();
-			searchMap.put("#salesPriceItems#", stockDocument.getSalesPrice());
-			lookupComp.setNewLookupAction("SalesPriceItem.xml", "ID", null, "price", this, true, searchMap);
-			lookupComp.setEnabled(true);
+			resetLookupField();
 //			lookupBtn.setEnabled(true);
 //			lookupBtn.setAction(lookupAction);
 		}
 	}
 
+	private void resetLookupField(){
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("#salesPriceItems#", stockDocument.getSalesPrice());
+		lookupComp.setNewPriceLookupAction(stockDocument.getSalesPrice(), "SalesPriceItem.xml", "ID", null, "price", this, true, searchMap);
+		lookupComp.setEnabled(true);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==resetButton){
