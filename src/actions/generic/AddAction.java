@@ -34,5 +34,6 @@ public class AddAction extends CustomAbstractAction{
 			return;
 		}
 		Appliction.getInstance().getCurrentForm().setState(FormStateEnum.InsertState);
+		Appliction.getInstance().getCurrentForm().getGenericInputForm().onShow();
 	}
 }

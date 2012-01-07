@@ -47,7 +47,7 @@ public class GenericSearchForm extends JPanel implements GenericSearchFormI{
 	private Map<String, JComponent> fieldMap = null;
 	private GenericFormToolbar toolbar = null;
 	private FormType formType;
-	private JComponent requestComp = null;
+	private JComponent focuseComp = null;
 	private Map<String, Object> defaultSearchMap = null;
 	 
 	public GenericSearchForm(EntityMetadata em, FormType formType){
@@ -91,8 +91,8 @@ public class GenericSearchForm extends JPanel implements GenericSearchFormI{
 					comp = new JCheckBox();
 				}else{
 					comp = getTextField(ef);
-					if (requestComp == null) {
-						requestComp = comp;
+					if (focuseComp == null) {
+						focuseComp = comp;
 					}
 					((JTextField) comp).addActionListener(new ActionListener() {
 						
@@ -238,7 +238,7 @@ public class GenericSearchForm extends JPanel implements GenericSearchFormI{
 
 	@Override
 	public void onShow() {
-		requestComp.requestFocus();
+		focuseComp.requestFocus();
 		
 	}
 	
