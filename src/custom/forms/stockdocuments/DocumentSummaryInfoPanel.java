@@ -73,13 +73,17 @@ public class DocumentSummaryInfoPanel extends JPanel implements TableDataChanged
 	}
 	
 	public void bindData(){
-		double price = 0, basicprice=0, taxprice = 0;
+		BigDecimal price = new BigDecimal("0.00"), basicprice=new BigDecimal("0.00"), taxprice = new BigDecimal("0.00");
+		price.setScale(2, BigDecimal.ROUND_CEILING);
+		basicprice.setScale(2, BigDecimal.ROUND_CEILING);
+		taxprice.setScale(2, BigDecimal.ROUND_CEILING);
+		
 		int payPeriod = DEFAULT_PAY_PERIOD;
 		
 		for(StockDocumentItem si: stockDocument.getItems()){
-			basicprice+=si.getBasicPrice();
-			taxprice+=si.getPdvPrice();
-			price+=(si.getBasicPrice() + si.getPdvPrice());
+			basicprice = basicprice.add(new BigDecimal(si.getBasicPrice()));
+			taxprice = taxprice.add(new BigDecimal(si.getPdvPrice()));
+			price = price.add(new BigDecimal((si.getBasicPrice() + si.getPdvPrice())));
 		}
 		
 		if(stockDocument.getPaymentDay()!=null){
@@ -90,7 +94,9 @@ public class DocumentSummaryInfoPanel extends JPanel implements TableDataChanged
 		totalPriceField.setText(currencyFormatter.format(price));
 		totalTaxField.setText(currencyFormatter.format(taxprice));
 		
-		BigDecimal totalPayments = new BigDecimal("0");
+		BigDecimal totalPayments = new BigDecimal("0.00");
+		totalPayments.setScale(2, BigDecimal.ROUND_CEILING);
+		
 		if(stockDocument.getPayments()!=null){
 			for(StockDocumentPayment pay: stockDocument.getPayments()){
 				totalPayments = totalPayments.add(new BigDecimal(pay.getAmount()));
