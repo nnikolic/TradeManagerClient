@@ -80,10 +80,10 @@ public class SalesPricePricesForm extends JPanel implements ActionListener,
 				if(col==0 || col==1){
 					return new IntegerRenderer();
 				}
-				if(col==3){
+				if(col==5){
 					return new PriceRenderer();
 				}
-				if(col==4){
+				if(col==6){
 					return new DoubleRenderer();
 				}
 				return new StringRenderer();

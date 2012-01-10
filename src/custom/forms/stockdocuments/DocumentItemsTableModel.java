@@ -16,7 +16,7 @@ public class DocumentItemsTableModel extends AbstractTableModel{
 
 	private StockDocument stockDocument = null;
 	
-	private String[] columnNames = {"STOCKDOCUMENTITEM.PRODUCTCODE", "STOCKDOCUMENTITEM.PRODUCTNAME", "STOCKDOCUMENTITEM.QUANTITY", "STOCKDOCUMENTITEM.DISCOUNT", "STOCKDOCUMENTITEM.PDVPRICE", "STOCKDOCUMENTITEM.BASICPRICE"};
+	private String[] columnNames = {"STOCKDOCUMENTITEM.PRODUCTCODE", "STOCKDOCUMENTITEM.PRODUCTNAME", "STOCKDOCUMENTITEM.PACKAGESIZE", "STOCKDOCUMENTITEM.QUANTITY", "STOCKDOCUMENTITEM.DISCOUNT", "STOCKDOCUMENTITEM.PDVPRICE", "STOCKDOCUMENTITEM.BASICPRICE"};
 	
 	public DocumentItemsTableModel(StockDocument sd){
 		stockDocument = sd;
@@ -55,15 +55,18 @@ public class DocumentItemsTableModel extends AbstractTableModel{
 			return item.getSalesPriceItem().getProduct().getName();
 		}
 		if(k==2){
-			return item.getQuantity();
+			return item.getSalesPriceItem().getProduct().getPackageSize().intValue()+ "/1";
 		}
 		if(k==3){
-			return item.getDiscount();
+			return item.getQuantity();
 		}
 		if(k==4){
-			return item.getPdvPrice();
+			return item.getDiscount();
 		}
 		if(k==5){
+			return item.getPdvPrice();
+		}
+		if(k==6){
 			return item.getBasicPrice();
 		}
 		return "Error";

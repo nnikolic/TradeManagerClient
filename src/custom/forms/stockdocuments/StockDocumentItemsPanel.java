@@ -83,6 +83,7 @@ public class StockDocumentItemsPanel extends JPanel implements ActionListener,
 		final StringRenderer sr1 = new StringRenderer();
 		final StringRenderer sr2 = new StringRenderer();
 		final StringRenderer sr3 = new StringRenderer();
+		final StringRenderer sr4 = new StringRenderer();
 		table = new JTable(tableModel){
 			public TableCellRenderer getCellRenderer(int row, int col) {
 				if(col==0){
@@ -92,15 +93,18 @@ public class StockDocumentItemsPanel extends JPanel implements ActionListener,
 					return sr2;
 				}
 				if(col==2){
-					return dr1;
+					return sr4;
 				}
 				if(col==3){
-					return dr2;
+					return dr1;
 				}
 				if(col==4){
-					return dr3;
+					return dr2;
 				}
 				if(col==5){
+					return dr3;
+				}
+				if(col==6){
 					return pr;
 				}
 				return sr3;
