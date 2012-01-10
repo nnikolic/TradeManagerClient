@@ -6,6 +6,8 @@ import generic.events.TableDataChangedEvent;
 import generic.listeners.ItemsSelectedListener;
 import generic.listeners.LookupListener;
 import generic.listeners.TableDataChangedListener;
+import generic.tools.MessageObject;
+import generic.tools.PopupManager;
 import hibernate.entityBeans.SalesPriceItem;
 import hibernate.entityBeans.StockDocument;
 import hibernate.entityBeans.StockDocumentItem;
@@ -22,6 +24,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import app.Appliction;
 
 import layouts.RiverLayout;
 import localization.Local;
@@ -79,6 +83,7 @@ public class NewDocumentItemPanel extends JPanel implements LookupListener, Acti
 //		priceIDField = StockDocumentInputForm.getTextField("Integer", true);
 		productNameField = StockDocumentInputForm.getTextField("String", false);
 		quantityField = StockDocumentInputForm.getTextField("Double", true);
+		quantityField.addActionListener(this);
 		discountField = StockDocumentInputForm.getTextField("Double", true);
 		
 		saveButton = new JButton(Local.getString("STOCKDOCUMENT.NEWITEMFORM.SAVEBUTTON"));
@@ -166,12 +171,38 @@ public class NewDocumentItemPanel extends JPanel implements LookupListener, Acti
 		lookupComp.setEnabled(true);
 	}
 	
+	private MessageObject validateInput(){
+		MessageObject message = new MessageObject();
+		message.setSeverity(MessageObject.NONE);
+		
+		if(currItem.getSalesPriceItem()!=null){
+			if(currItem.getQuantity() % currItem.getSalesPriceItem().getProduct().getPackageSize() != 0){
+				message.setMessage("Quantity is not devidable with product package size.");
+				message.setSeverity(MessageObject.WARN);
+				message.setMessageCode("STOCKDOCUMENT.QUANTITY_NOT_DEVIDABLE_W");
+			}
+		}else{
+			message.setMessage("Sales price item is null");
+			message.setSeverity(MessageObject.WARN);
+			message.setMessageCode("STOCKDOCUMENT.STOCKDOCUMENT_W");
+		}
+		
+		return message;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==resetButton){
 			currItem = new StockDocumentItem();
+		}else if(e.getSource()==quantityField){
+			saveButton.doClick();
 		}else{
 			unbindData();
+			MessageObject validationMessage = validateInput();
+			if(validationMessage.getSeverity()!=MessageObject.NONE){
+				PopupManager.showMessage(validationMessage, Appliction.getInstance().getCurrentForm());
+				return;
+			}
 			if(currItem.getSalesPriceItem()!=null){
 				currItem.calculate();
 				stockDocument.getItems().add(currItem);
