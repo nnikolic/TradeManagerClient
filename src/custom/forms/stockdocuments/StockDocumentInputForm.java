@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import layouts.RiverLayout;
+import localization.Local;
 import model.custom.DocumentTypeEnum;
 import model.metadata.EntityMetadata;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -136,6 +137,9 @@ public class StockDocumentInputForm extends JPanel implements GenericInputFormI{
 
 	@Override
 	public ServerResponse saveEntity() {
+		Appliction.getInstance().getPopupProgressBar().setText(Local.getString("SAVING"));
+		Appliction.getInstance().getPopupProgressBar().setVisible(true);
+		Appliction.getInstance().getPopupProgressBar().repaint();
 		ServerResponse sr = null;
 		
 		sr = RemotesManager.getInstance().getGenericPersistenceRemote().selectEntities(CompanyCode.class, 1, null, null);		
@@ -158,6 +162,7 @@ public class StockDocumentInputForm extends JPanel implements GenericInputFormI{
 			stockDocument = (StockDocument) sr.getData();
 		}else
 			sr = RemotesManager.getInstance().getStockDocumentRemote().updateStockDocument(stockDocument);
+		Appliction.getInstance().getPopupProgressBar().setVisible(false);
 		return sr;
 	}
 	

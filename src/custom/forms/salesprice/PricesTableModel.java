@@ -13,7 +13,7 @@ public class PricesTableModel extends AbstractTableModel{
 	 * 
 	 */
 	private static final long serialVersionUID = -7838546388787991892L;
-	private String[] columnNames = {"SALESPRICEITEM.ID", "SALESPRICEITEM.PRODUCTID", "SALESPRICEITEM.PRODUCTNAME", "SALESPRICEITEM.WHOLASALEPRICE", "SALESPRICEITEM.TAXRATE"};
+	private String[] columnNames = {"SALESPRICEITEM.ID", "SALESPRICEITEM.PRODUCTID", "SALESPRICEITEM.PRODUCTCODE", "SALESPRICEITEM.PRODUCTNAME", "SALESPRICEITEM.PACKAGESIZE", "SALESPRICEITEM.WHOLASALEPRICE", "SALESPRICEITEM.TAXRATE"};
 	
 	private SalesPrice salesPrice = null;
 	
@@ -50,12 +50,18 @@ public class PricesTableModel extends AbstractTableModel{
 			return item.getProduct().getID();	
 		}
 		if(k==2){
-			return item.getProduct().getName();
+			return item.getProduct().getCode();
 		}
 		if(k==3){
-			return item.getWholesalePrice();
+			return item.getProduct().getName();
 		}
 		if(k==4){
+			return item.getProduct().getPackageSize().intValue()+"/1";
+		}
+		if(k==5){
+			return item.getWholesalePrice();
+		}
+		if(k==6){
 			return item.getTaxRate();
 		}
 		return "Error";
